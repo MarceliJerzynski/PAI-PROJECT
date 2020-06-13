@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Championships Dashboard</h1>
+    <p class="lead">Championships Dashboard is a free web application to administer all championships created by users. With this app you can create new tournament, sing up as participant or see the results of created championships.</p>
+</div>
+
+<div class="row">
+    @if (@Session["UserMail"].Equals("Guest"))
+    {
+        <div class="col-md-4">
+            <h2>Sign in</h2>
+            <p>
+                If you want to create tournament or create championship, you must be logged in.
+            </p>
+            <p>@Html.ActionLink("Sign in", "Login", "Login", null, new { @class = "btn btn-primary btn-lg" })</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Sign up</h2>
+            <p>If you don't have an account, create one</p>
+            <p>@Html.ActionLink("Sign up", "Register", "Register", null, new { @class = "btn btn-primary btn-lg" })</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Continue as a guest</h2>
+            <p>As a guest you can only see created tournaments.</p>
+            <p>@Html.ActionLink("Continue as guest", "Index", "Tournaments", null, new { @class = "btn btn-primary btn-lg" })</p>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-4">
+            <h2>Sign out</h2>
+            <p>
+                Bye bye Mr/Ms <b>@Session["UserMail"]</b>
+            </p>
+            <p>@Html.ActionLink("Sign out", "SignOut", "Home", null, new { @class = "btn btn-primary btn-lg" })</p>
+        </div>
+
+        <div class="col-md-4">
+            <h2>Go back to Tournaments view</h2>
+            <p>@Html.ActionLink("Go back to list", "Index", "Tournaments", null, new { @class = "btn btn-primary btn-lg" })</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Championships.Models.Tournament>
+
+@{
+    ViewBag.Title = "Tournaments";
+}
+
+<h2>All tournaments</h2>
+
+@if (!Session["UserMail"].Equals("Guest"))
+{
+    <p>
+        @Html.ActionLink("Create new Tournament", "Create")
+    </p>
+}
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("SearchText")
+    </p>
+
+    <p>
+        @Html.RadioButton("registered", "true")<span>Show only tournaments where you are taking part</span><br />
+        @Html.RadioButton("registered", "false")<span>Show all tournaments</span><br />
+    </p>
+    <input type="submit" value="Search" />
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxAmountOfUsers)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxAmountOfUsers)
+            </td>
+            @if (!@Session["UserMail"].Equals("Guest"))
+            {
+                <td>
+                    @if (item.Organizer != null && item.Organizer.Equals(Session["UserMail"]))
+                    {
+                        @Html.ActionLink("Details", "Details", new { id = item.Name }, new { @style = "float: left left-margin: 10px" })
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Name }, new { @style = "float: left left-margin: 10px" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Name }, new { @style = "float: left left-margin: 10px" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Details", "Details", new { id = item.Name }, new { @style = "float: left left-margin: 10px" })
+                    }
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.ActionLink("Sign in", "Login", "Login")
+                </td>
+            }
+        </tr>
+    }
+
+    @if (ViewBag.Page > 0)
+    {
+        <a href="@Url.Action("Index", new { page = ViewBag.Page - 1 })"
+           class="btn btn-default">
+            &laquo; Prev
+        </a>
+    }
+    @if (ViewBag.Page < ViewBag.MaxPage)
+    {
+        <a href="@Url.Action("Index", new { page = ViewBag.Page + 1 })"
+           class="btn btn-default">
+            Next &raquo;
+        </a>
+    }
+    <caption>Page : @ViewBag.Page</caption>
+
+</table>

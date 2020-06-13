@@ -1,0 +1,21 @@
+﻿@model Championships.Models.User
+@{
+    ViewBag.Title = ViewBag.Id;
+}
+
+<h2>Tournament - @ViewBag.Id</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h4>You have been succesfully registered on this tournament</h4>
+}
+
+<div>
+    @Html.ActionLink("Back to list", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

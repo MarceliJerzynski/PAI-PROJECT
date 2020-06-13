@@ -1,0 +1,121 @@
+﻿@using Championships.Models;
+@model Tuple<Tournament, User>
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Html.DisplayFor(model => model.Item1.Name)</h2>
+
+<div>
+    <h4>Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Item1.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item1.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Item1.DateToRegister)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item1.DateToRegister)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Item1.MaxAmountOfUsers)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item1.MaxAmountOfUsers)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Item1.Discipline)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item1.Discipline)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Item1.Organizer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item1.Organizer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Item1.Sponsors)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item1.Sponsors)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Item1.RegisteredUsers)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item1.RegisteredUsers.Count)
+        </dd>
+
+    </dl>
+</div>
+<p>
+
+    @if (@Session["UserMail"].Equals("Guest"))
+    {
+        <p>You are just a guest, do you think you can participate in this?!</p>
+    } else
+    if (Model.Item2.registeredTournaments.Contains(Model.Item1))
+    {
+        <p>You are already registered in this tournament!</p>
+    } else
+    if (Model.Item2.Mail.Equals(Model.Item1.Organizer))
+    {
+        <p>You are organizer of this tournament</p>
+    } else
+    if (Model.Item1.RegisteredUsers.Count >= Model.Item1.MaxAmountOfUsers)
+    {
+        <p>There is no more space for another participant</p>
+    } else
+    if (Model.Item1.DateToRegister < DateTime.Now)
+    {
+        <p>Application time is over</p>
+
+        <table class="table">
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.Item2.Mail)</td>
+            </tr>
+            @foreach (var user in Model.Item1.RegisteredUsers)
+            {
+                <tr>
+                    @Html.DisplayFor(modelItem => user.Mail)
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        @Html.ActionLink("Take part in this tournament!", "TakePart", "Tournaments", new { id = Model.Item1.Name }, new { @class = "btn btn-primary btn-lg" })
+    }
+
+    <br />
+    @Html.ActionLink("Back to List", "Index")
+    <br />
+
+    @if (Model.Item1.Organizer != null && Model.Item1.Organizer.Equals(Session["UserMail"]))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Item1.Name })
+    }
+
+
+</p>
